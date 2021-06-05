@@ -2,17 +2,19 @@ module.exports.config = {
 	name: "roleplay",
 	version: "1.0.0",
 	hasPermssion: 0,
-	credits: "CatalizCS",
+	credits: "Mirai Team",
 	description: "Hun, ôm, ... đủ thứ trò in here!",
 	commandCategory: "random-img",
-	usages: "roleplay",
 	cooldowns: 1,
-	dependencies: ['request', 'fs-extra']
+	dependencies: {
+        "request": "",
+        "fs-extra": ""
+    }
 };
 
 module.exports.onLoad = () => {
-    const { existsSync, createWriteStream } = require("fs-extra");
-    const request = require('request');
+    const { existsSync, createWriteStream } = global.nodemodule["fs-extra"];
+    const request = global.nodemodule["request"];
 
     const exist = existsSync(__dirname + "/cache/anime.json");
     const writeData = createWriteStream(__dirname + "/cache/anime.json");
@@ -20,11 +22,11 @@ module.exports.onLoad = () => {
     else return;
 }
 
-module.exports.event = ({ event, api, client }) => {
+module.exports.event = ({ event, api }) => {
     if (event.type == "message_unsend") return;
-    const request = require("request");
-    const { readFileSync, createReadStream, createWriteStream, unlinkSync } = require("fs-extra");
-    let settings = client.threadSetting.get(event.threadID) || {};
+    const request = global.nodemodule["request"];
+    const { readFileSync, createReadStream, createWriteStream, unlinkSync } = global.nodemodule["fs-extra"];
+    let settings = global.data.threadData.get(parseInt(event.threadID)) || {};
     let mention = Object.keys(event.mentions);
     if (!settings["roleplay"] || !settings || mention.length == 0) return;
     let animeData = JSON.parse(readFileSync(__dirname + "/cache/anime.json"));
@@ -97,13 +99,13 @@ module.exports.event = ({ event, api, client }) => {
     }
 }
 
-module.exports.run = async ({ event, api, args, Threads, client, utils }) => {
-    let settings = (await Threads.getData(event.threadID)).settings;
-    if (typeof settings["roleplay"] == "undefined" || settings["roleplay"] == false) settings["roleplay"] = true;
-	else settings["roleplay"] = false;
+module.exports.run = async ({ event, api, Threads }) => {
+    let threadData = (await Threads.getData(event.threadID)).threadData;
+    if (typeof threadData["roleplay"] == "undefined" || threadData["roleplay"] == false) threadData["roleplay"] = true;
+	else threadData["roleplay"] = false;
 	
-	await Threads.setData(event.threadID, options = { settings });
-	client.threadSetting.set(event.threadID, settings);
+	await Threads.setData(event.threadID, { threadData });
+	global.data.threadData.set(parseInt(event.threadID), threadData);
 	
-	return api.sendMessage(`Đã ${(settings["roleplay"] == true) ? "bật" : "tắt"} thành công roleplay!`, event.threadID);
+	return api.sendMessage(`Đã ${(threadData["roleplay"] == true) ? "bật" : "tắt"} thành công roleplay!`, event.threadID);
 }

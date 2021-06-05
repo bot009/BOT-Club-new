@@ -2,10 +2,9 @@ module.exports.config = {
 	name: "work",
 	version: "0.0.1",
 	hasPermssion: 0,
-	credits: "CatalizCS",
+	credits: "Mirai Team",
 	description: "Có làm thì mới có ăn!",
 	commandCategory: "Economy",
-	usages: "work",
     cooldowns: 5,
     envConfig: {
         cooldownTime: 1200000
@@ -14,7 +13,8 @@ module.exports.config = {
 
 module.exports.run = async ({ event, api, Currencies, global }) => {
     const { threadID, messageID } = event;
-    const cooldown = global.work.cooldownTime;
+    
+    const cooldown = global.configModule[this.config.name].cooldownTime;
     const data = (await Currencies.getData(event.senderID)).workTime;
     if (typeof data !== "undefined" && cooldown - (Date.now() - data) > 0) {
         var time = cooldown - (Date.now() - data),

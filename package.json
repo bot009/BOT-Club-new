@@ -1,13 +1,10 @@
 {
 	"name": "miraiBot",
-	"version": "1.1.2",
+	"version": "1.2.0",
 	"description": "A simple Facebook Messenger Bot made by me(CatalizCS) and my brother SpermLord.",
 	"main": "mirai.js",
-	"engines": {
-		"node": "14.x"
-	},
 	"scripts": {
-		"start": "pm2 start pm2.config.js --no-daemon",
+		"start": "node index",
 		"login": "node login",
 		"test": "node --trace-warnings --use_strict --async-stack-traces mirai"
 	},
@@ -40,12 +37,12 @@
 		"fca-unofficial": "",
 		"figlet": "",
 		"fs-extra": "",
+		"jimp": "",
 		"minimist": "",
 		"moment": "",
 		"ms": "",
 		"npmlog": "",
 		"path": "",
-		"pm2": "",
 		"readline": "",
 		"request": "",
 		"semver": "",

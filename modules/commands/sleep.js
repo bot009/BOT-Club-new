@@ -2,25 +2,19 @@ module.exports.config = {
 	name: "sleep",
 	version: "1.0.0",
 	hasPermssion: 0,
-	credits: "SpermLord",
+	credits: "Mirai Team",
 	description: "Tính thời gian thức dậy hoàn hảo cho bạn",
 	commandCategory: "health",
-	usages: "sleep [Time]",
+	usages: "[Time]",
 	cooldowns: 5,
-	dependencies: ["moment-timezone"],
-	info: [
-		{
-			key: 'Time',
-			prompt: 'Thời gian bạn thức dậy',
-			type: 'Giờ',
-			example: '07:00'
-		}
-	]
+	dependencies: {
+		"moment-timezone": ""
+	}
 };
 
-module.exports.run = function({ api, event, args, global }) {
-	let { senderID, threadID, messageID } = event;
-	const moment = require("moment-timezone");
+module.exports.run = function({ api, event, args }) {
+	let { threadID, messageID } = event;
+	const moment = global.nodemodule["moment-timezone"];
 	var sleepTime = [];
 	let content = args.join(" ");
 	var contentHour = content.split(":")[0];

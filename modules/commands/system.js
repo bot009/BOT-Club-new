@@ -2,12 +2,13 @@ module.exports.config = {
 	name: "system",
 	version: "1.0.0",
 	hasPermssion: 0,
-	credits: "CatalizCS",
+	credits: "Mirai Team",
 	description: "Xem thông tin phần cứng mà bot đang sử dụng",
 	commandCategory: "system",
-	usages: "system",
 	cooldowns: 5,
-	dependencies: ["systeminformation"]
+	dependencies: {
+		"systeminformation": ""
+	}
 };
 
 function byte2mb(bytes) {
@@ -18,7 +19,7 @@ function byte2mb(bytes) {
 }
 
 module.exports.run = async function ({ api, event }) {
-	const { cpu, cpuTemperature, currentLoad, memLayout, diskLayout, mem, osInfo } = require("systeminformation");
+	const { cpu, cpuTemperature, currentLoad, memLayout, diskLayout, mem, osInfo } = global.nodemodule["systeminformation"];
 	const timeStart = Date.now();
 
 	try {

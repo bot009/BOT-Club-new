@@ -2,16 +2,18 @@ module.exports.config = {
     name: "morse",
     version: "1.0.0",
     hasPermssion: 0,
-    credits: "SpermLord",
+    credits: "Mirai Team",
     description: "Mã hoá đoạn văn bản của bạn trở thành mã morse",
     commandCategory: "cipher",
-    usages: "morse [encode hoặc decode] [đoạn text ASCII cần mã hoá]",
+    usages: "[encode hoặc decode] [đoạn text ASCII cần mã hoá]",
     cooldowns: 5,
-    dependencies: ["morsify"],
+    dependencies: {
+        "morsify": ""
+    }
 };
 
-module.exports.run = function({ api, event, args, utils }) {
-   const morsify = require("morsify");
+module.exports.run = function({ api, event, args }) {
+   const morsify = global.nodemdule["morsify"];
    switch (event.type) {
        case "message_reply": {
         const content = event.messageReply.body || "";
@@ -25,7 +27,7 @@ module.exports.run = function({ api, event, args, utils }) {
                         return api.sendMessage(morsify.decode(content), event.threadID, event.messageID);
                     }
                default:
-                    return utils.throwError("morse", event.threadID, event.messageID);
+                    return global.client.utils.throwError("morse", event.threadID, event.messageID);
            }
        }
        default: {
@@ -40,7 +42,7 @@ module.exports.run = function({ api, event, args, utils }) {
                         return api.sendMessage(morsify.decode(content), event.threadID, event.messageID);
                     }
                 default:
-                    return utils.throwError("morse", event.threadID, event.messageID);
+                    return global.client.utils.throwError("morse", event.threadID, event.messageID);
             }
        }
    }

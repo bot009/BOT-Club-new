@@ -1,14 +1,23 @@
-module.exports = function({ api, global, client, models, Users, Threads, Currencies, utils }) {
+module.exports = function({ api, models, Users, Threads, Currencies }) {
 	const logger = require("../../utils/log.js");
-	return function({ event }) {
-		const { senderID, threadID } = event;
 
-		if (client.userBanned.has(parseInt(senderID)) || client.threadBanned.has(parseInt(threadID)) || global.config.allowInbox == true && senderID == threadID) return;
-		const commands = client.commandRegister.get("event") || [];
-		for (const command of commands) {
-			const commandModule = client.commands.get(command);
+	return function({ event }) {
+
+		const { allowInbox } = global.config;
+		const { userBanned, threadBanned } = global.data;
+		const { commands, eventRegistered } = global.client;
+
+		var { senderID, threadID } = event;
+
+		senderID = parseInt(senderID);
+		threadID = parseInt(threadID);
+
+		if (userBanned.has(senderID) || threadBanned.has(threadID) || allowInbox == true && senderID == threadID) return;
+
+		for (const commandName of eventRegistered) {
+			const commandModule = commands.get(commandName);
 			try {
-				commandModule.event({ event, api, global, client, models, Users, Threads, Currencies, utils });
+				if (commandModule) commandModule.handleEvent({ event, api, models, Users, Threads, Currencies });
 			}
 			catch (error) {
 				logger(error + " at event command: " + commandModule.config.name , "error");
